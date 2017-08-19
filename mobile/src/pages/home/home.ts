@@ -7,19 +7,25 @@ import { Rides } from '../../service/Rides';
   templateUrl: 'home.html'
 })
 export class HomePage {
+  parks: Array<{location: string, name: string, timezone: string}>;
 
   constructor(public navCtrl: NavController) {
     //EXAMPLE DATA GRABBING
     let ride = new Rides();
+    this.parks = [];
     ride.getParks(res => {
       console.log(res)
+      for(var key in res){
+        let park = res[key];
+        park.id = key;
+        this.parks.push(park);
+      }
     });
-        ride.getRides("KingsIsland", res=>{
-      console.log("Rides:",res);
-    })
-    ride.getOperationSchedule("KingsIsland", res=>{
-      console.log("SCHEDULE:",res);
-    })
+  }
+
+  itemTapped(event, item) {
+    // That's right, we're pushing to ourselves!
+    console.log(item);
   }
 
 }
