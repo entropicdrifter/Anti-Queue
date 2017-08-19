@@ -26,7 +26,7 @@ export class Park {
                 this.items.push({
                     title: ride.name,
                     note: ride.status === "Operating" ?
-                        ride.waitTime + " minute wait" : ride.status,
+                        ride.waitTime + " minute wait" + (ride.fastPass && (ride.fastPassReturnTime !== undefined) ? "  FastPass: " + ride.fastPassReturnTime.startTime : "") : ride.status,
                     icon: iconInfo.icon,
                     color: iconInfo.color
                 });
