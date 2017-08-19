@@ -10,11 +10,13 @@ import { Rides } from '../../service/Rides';
 export class Park {
     park: string;
     icons: string[];
+    title: string;
     items: Array<{ title: string, note: string, icon: string, color: string }>;
     loading: boolean;
 
     constructor(public navCtrl: NavController, public navParams: NavParams) {
         this.park = navParams.get('parkId');
+        this.title = navParams.get('title');
         let ride = new Rides();
         this.loading = true;
         ride.getRides(this.park, res => {

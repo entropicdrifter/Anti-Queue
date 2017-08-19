@@ -26,7 +26,8 @@ export class HomePage {
 
   itemTapped(event, park) {
     this.navCtrl.push(Park, {
-      parkId: park.id
+      parkId: park.id,
+      title: park.name
     });
   }
 
