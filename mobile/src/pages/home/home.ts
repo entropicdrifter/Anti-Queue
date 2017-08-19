@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import { Rides } from '../../service/Rides';
+import {Park} from '../park/park';
 
 @Component({
   selector: 'page-home',
@@ -23,9 +24,10 @@ export class HomePage {
     });
   }
 
-  itemTapped(event, item) {
-    // That's right, we're pushing to ourselves!
-    console.log(item);
+  itemTapped(event, park) {
+    this.navCtrl.push(Park, {
+      parkId: park.id
+    });
   }
 
 }
