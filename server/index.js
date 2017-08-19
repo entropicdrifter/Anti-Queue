@@ -26,6 +26,8 @@ for (var park in Themeparks.Parks) {
     p.name = parkObj.Name;
     p.timezone = parkObj.Timezone;
     p.location = parkObj.Location.toString();
+    p.lat = parkObj.Location.LatitudeRaw;
+    p.long = parkObj.Location.LongitudeRaw;
     allParks[park] = p;
 }
 
