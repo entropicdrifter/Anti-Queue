@@ -4,8 +4,13 @@
   "description": "node server for antique api",
   "main": "index.js",
   "scripts": {
+<<<<<<< HEAD
     "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
+=======
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+>>>>>>> 88059831baa81fb6293ccc61f52e9e5b6c28d161
   },
   "author": "",
   "license": "ISC",
