@@ -6,6 +6,19 @@ app.use(cors());
 app.options('*', cors());
 const PORT = 3000;
 
+var cacheManager = require('cache-manager');
+Themeparks.Settings.Cache = cacheManager.caching({
+    store: require('cache-manager-fs-binary'),
+    options: {
+        reviveBuffers: false,
+        binaryAsStream: true,
+        ttl: 60 * 60,
+        maxsize: 1000 * 1000 * 1000,
+        path: 'diskcache',
+        preventfill: false
+    }
+});
+
 var allParks = {};
 for (var park in Themeparks.Parks) {
     var p = {};

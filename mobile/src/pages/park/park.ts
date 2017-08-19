@@ -6,18 +6,14 @@ import { Rides } from '../../service/Rides';
     selector: 'park',
     templateUrl: 'park.html'
 })
+
 export class Park {
     park: string;
     icons: string[];
     items: Array<{ title: string, note: string, icon: string, color: string }>;
 
     constructor(public navCtrl: NavController, public navParams: NavParams) {
-        // Let's populate this page with some filler content for funzies
-        this.icons = ['flask', 'wifi', 'beer', 'football', 'basketball', 'paper-plane',
-            'american-football', 'boat', 'bluetooth', 'build'];
-        // If we navigated to this page, we will have an item available as a nav param
         this.park = navParams.get('parkId');
-        // this.park = "KingsIsland";
         let ride = new Rides();
         ride.getRides(this.park, res => {
             console.log("Rides:", res);
@@ -36,14 +32,14 @@ export class Park {
     }
 
     getWaitTimeString(waitTime) {
-        return
+
     }
 
     getIcon(status) {
         switch (status) {
             case "Refurbishment":
                 return {
-                    icon: "ios-construct",
+                    icon: "ios-construct-outline",
                     color: "red"
                 };
             case "Closed":
@@ -53,7 +49,7 @@ export class Park {
                 };
             case "Down":
                  return {
-                    icon: "ios-build",
+                    icon: "ios-build-outline",
                     color: "red"
                 };
             default:
