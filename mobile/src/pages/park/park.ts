@@ -14,6 +14,7 @@ export class Park {
     items: Array<{ title: string, note: string, icon: string, color: string }>;
     closedRides: Array<{ title: string, note: string, icon: string, color: string}>;
     showClosed: boolean;
+    filteredRides: Array<{ title: string, note: string, icon: string, color: string }>;    
     loading: boolean;
 
     constructor(public navCtrl: NavController, public navParams: NavParams) {
@@ -63,6 +64,17 @@ export class Park {
             let bText = b.name.toUpperCase();
             return (aText < bText) ? -1 : (aText > bText) ? 1 : 0;
         })
+    }
+
+    onInput(e){  
+        function rideFilter(ride, query){
+            return ride.title.toUpperCase().includes(query);
+        }
+        let query = e.target.value.toUpperCase();
+        let filteredRides = this.items && this.items.filter(ride => rideFilter(ride, query)) 
+        && (this.closedRides !== null ? 
+            this.closedRides.filter(ride => rideFilter(ride, query)):null);
+        this.filteredRides = filteredRides;
     }
 
     getIcon(status) {

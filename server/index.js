@@ -26,7 +26,9 @@ for (var park in Themeparks.Parks) {
     p.name = parkObj.Name;
     p.timezone = parkObj.Timezone;
     p.location = parkObj.Location.toString();
-    allParks[park] = p; 
+    p.lat = parkObj.Location.LatitudeRaw;
+    p.long = parkObj.Location.LongitudeRaw;
+    allParks[park] = p;
 }
 
 app.get('/getParks', function (req, res) {
@@ -37,16 +39,16 @@ app.get('/getParkOpeningTimes/:parkId', function (req, res) {
     var park = new Themeparks.Parks[req.params.parkId]();
     park.GetOpeningTimes().then(function (times) {
         res.send(times);
-    }, console.error);
+    }).catch(err => { console.log(err.message) });
 })
 
 app.get('/getRides/:parkId', function (req, res) {
     var park = new Themeparks.Parks[req.params.parkId]();
     park.GetWaitTimes().then(function (rides) {
         res.send(rides);
-    }, console.error);
+    }).catch(err => { console.log(err) });
 })
 
 app.listen(PORT, function () {
-  console.log('🎢 Anti-Queue is running on port ' + PORT)
+    console.log('🎢 Anti-Queue is running on port ' + PORT)
 })
