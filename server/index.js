@@ -1,6 +1,9 @@
 var Themeparks = require("themeparks");
-const express = require("express");
-const app = express();
+const cors = require('cors');
+const express = require('express');
+let app = express();
+app.use(cors());
+app.options('*', cors());
 
 var allParks = {};
 for (var park in Themeparks.Parks) {
