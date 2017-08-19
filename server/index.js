@@ -1,6 +1,7 @@
 var Themeparks = require("themeparks");
 const express = require("express");
 const app = express();
+const PORT = 3000;
 
 var allParks = {};
 for (var park in Themeparks.Parks) {
@@ -30,6 +31,6 @@ app.get('/getRides/:parkId', function (req, res) {
     }, console.error);
 })
 
-app.listen(3000, function () {
-  console.log('app listening on port 3000!')
+app.listen(PORT, function () {
+  console.log('🎢 Anti-Queue is running on port ' + PORT)
 })
