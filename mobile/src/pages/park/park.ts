@@ -12,6 +12,8 @@ export class Park {
     icons: string[];
     title: string;
     items: Array<{ title: string, note: string, icon: string, color: string }>;
+    closedRides: Array<{ title: string, note: string, icon: string, color: string}>;
+    showClosed: boolean;
     loading: boolean;
 
     constructor(public navCtrl: NavController, public navParams: NavParams) {
@@ -19,11 +21,14 @@ export class Park {
         this.title = navParams.get('title');
         let ride = new Rides();
         this.loading = true;
+        this.closedRides = null;
+        this.showClosed = false;
         ride.getRides(this.park, res => {
             this.loading = false;
             console.log("Rides:", res);
             this.items = [];
             res = this.sortRidesAlphabetically(res);
+            var closed = 0;
             res && res.forEach((ride) => {
                 let iconInfo = this.getIcon(ride.status);
                 this.items.push({
@@ -33,7 +38,22 @@ export class Park {
                     icon: iconInfo.icon,
                     color: iconInfo.color
                 });
+                if (ride.status !== "Operating") closed++
             })
+            if(closed >= 20) {
+                this.closedRides = [];
+                var l = this.items.length
+                for( var i = 0; i < l; i++) {
+                    var ride = this.items[i];
+                    if (ride.icon === "ios-close-circle-outline") {
+                        this.items.splice(i, 1);
+                        this.closedRides.push(ride);
+                        i--;
+                        l--;
+                    }
+                }
+            }
+            
         })
     }
 

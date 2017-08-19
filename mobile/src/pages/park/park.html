@@ -11,7 +11,26 @@
   <div class="spinner" *ngIf="loading">
     <ion-spinner name="crescent"></ion-spinner>
   </div>
+
   <ion-list>
+      <div *ngIf="closedRides !== null">
+          <button ion-item  (click)="showClosed = !showClosed">
+            <ion-icon name="ios-close-circle-outline" item-left ngClass=red></ion-icon>
+              Closed Rides Hidden
+            <div class="item-note" item-right>
+              Show/Hide
+            </div>
+          </button>
+          <div *ngIf="showClosed">
+          <button ion-item *ngFor="let closed of closedRides" (click)="itemTapped($event, closed)">
+              <ion-icon [name]="closed.icon" item-left ngClass={{closed.color}}></ion-icon>
+                {{closed.title}}
+              <div class="item-note" item-right>
+                {{closed.note}}
+              </div>
+            </button>
+          </div>
+        </div>
     <button ion-item *ngFor="let item of items" (click)="itemTapped($event, item)">
       <ion-icon [name]="item.icon" item-left ngClass={{item.color}}></ion-icon>
       {{item.title}}
