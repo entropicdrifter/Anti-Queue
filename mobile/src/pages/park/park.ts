@@ -9,6 +9,7 @@ import { Rides } from '../../service/Rides';
 export class Park {
     park: string;
     icons: string[];
+    title: string;
     items: Array<{ title: string, note: string, icon: string, color: string }>;
 
     constructor(public navCtrl: NavController, public navParams: NavParams) {
@@ -17,6 +18,7 @@ export class Park {
             'american-football', 'boat', 'bluetooth', 'build'];
         // If we navigated to this page, we will have an item available as a nav param
         this.park = navParams.get('parkId');
+        this.title = navParams.get('title');
         // this.park = "KingsIsland";
         let ride = new Rides();
         ride.getRides(this.park, res => {
