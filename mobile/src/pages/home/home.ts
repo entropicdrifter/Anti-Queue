@@ -9,7 +9,7 @@ import { Geolocation } from '@ionic-native/geolocation';
   templateUrl: 'home.html'
 })
 export class HomePage {
-  parks: Array<{id: string, location: string, name: string, timezone: string}>;
+  parks: Array<{id: string, location: string, name: string, timezone: string, lat: number, long: number}>;
   user: {lat: string, long: string};
 
   constructor(public navCtrl: NavController, private geolocation: Geolocation) {
@@ -41,58 +41,43 @@ export class HomePage {
       });
   }
 
-  parseLocationString(location){
-    let longPattern = /\((.+)\,/;
-    var longArr = location.match(longPattern);
-    var long = longArr[1];
-
-    let latPattern = /\s(.+)\)/;
-    let latArr = location.match(latPattern);
-    let lat = latArr[1];
-    return  {
-      lat: lat,
-      long: long
-    }
-  }
-
-  parseDMS(input) {
-    var parts = input.split(/[^\d\w]+/);
-    var lat = this.ConvertDMSToDD(parts[0], parts[1], parts[2], parts[3]);
-    var lng = this.ConvertDMSToDD(parts[4], parts[5], parts[6], parts[7]);
-  }
-
-  ConvertDMSToDD(degrees, minutes, seconds, direction) {
-    var dd = degrees + minutes/60 + seconds/(60*60);
-
-    if (direction == "S" || direction == "W") {
-        dd = dd * -1;
-    } // Don't do anything for N or E
-    console.log(dd);
-    return dd;
-  }
-
   calculateDistance(user){
-    let parks = this.parks;
     let userX = user.lat;
     let userY = user.long;
-    let parksToUser = {};
-    let earthRadius = 6371;
-    for(var key in parks){
-      let parkLocation = this.parseLocationString(parks[key].location);
-      this.parseDMS(parkLocation.lat);
-    }
-    console.log(parksToUser);    
+     let parks = this.parks;
+     let parksToUser = {};
+     for(var key in parks){
+        let parkX = parks[key].lat;
+        let parkY = parks[key].long;
+        var a = parkX - userX
+        var b = parkY - userY
+        var c = Math.sqrt( a*a + b*b );
+        parksToUser[parks[key].name] = c;
+        console.log(parksToUser);
+        this.sortByDistance(parksToUser);
+     }
   }
 
-  sortParksByDistance(parksToUser){
+  sortByDistance(parksToUser){
+    let distances = [];
     for(var key in parksToUser){
-      
+      let park = {
+        name: key,
+        distance: parksToUser[key]
+      }
+      distances.push(park);
     }
+    distances.sort(function(a, b) {
+        return a.distance - b.distance;
+    });
+    this.parks = distances;
+    console.log(distances);
   }
 
   itemTapped(event, park) {
     this.navCtrl.push(Park, {
-      parkId: park.id
+      parkId: park.id,
+      title: park.name
     });
   }
 

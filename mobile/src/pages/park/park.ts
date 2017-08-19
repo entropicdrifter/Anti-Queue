@@ -6,32 +6,68 @@ import { Rides } from '../../service/Rides';
     selector: 'park',
     templateUrl: 'park.html'
 })
+
 export class Park {
     park: string;
     icons: string[];
-    items: Array<{ title: string, note: string, icon: string }>;
+    title: string;
+    items: Array<{ title: string, note: string, icon: string, color: string }>;
+    loading: boolean;
 
     constructor(public navCtrl: NavController, public navParams: NavParams) {
-        // Let's populate this page with some filler content for funzies
-        this.icons = ['flask', 'wifi', 'beer', 'football', 'basketball', 'paper-plane',
-            'american-football', 'boat', 'bluetooth', 'build'];
-        // If we navigated to this page, we will have an item available as a nav param
         this.park = navParams.get('parkId');
-        this.park = "KingsIsland";
+        this.title = navParams.get('title');
         let ride = new Rides();
-        ride.getRides("KingsIsland", res => {
+        this.loading = true;
+        ride.getRides(this.park, res => {
+            this.loading = false;
             console.log("Rides:", res);
             this.items = [];
-            debugger
-            let rides = res.slice(0, 10);
-            rides.forEach((ride)=>{
+            res = this.sortRidesAlphabetically(res);
+            res && res.forEach((ride) => {
+                let iconInfo = this.getIcon(ride.status);
                 this.items.push({
                     title: ride.name,
-                    note: ride.status,
-                    icon: this.icons[Math.floor(Math.random() * this.icons.length)]
+                    note: ride.status === "Operating" ?
+                        ride.waitTime + " minute wait" + (ride.fastPass && (ride.fastPassReturnTime !== undefined) ? "  FastPass: " + ride.fastPassReturnTime.startTime : "") : ride.status,
+                    icon: iconInfo.icon,
+                    color: iconInfo.color
                 });
             })
         })
+    }
+
+    sortRidesAlphabetically(rides){
+        return rides.sort((a,b) => {
+            let aText = a.name.toUpperCase();
+            let bText = b.name.toUpperCase();
+            return (aText < bText) ? -1 : (aText > bText) ? 1 : 0;
+        })
+    }
+
+    getIcon(status) {
+        switch (status) {
+            case "Refurbishment":
+                return {
+                    icon: "ios-construct-outline",
+                    color: "red"
+                };
+            case "Closed":
+                return {
+                    icon: "ios-close-circle-outline",
+                    color: "red"
+                };
+            case "Down":
+                 return {
+                    icon: "ios-build-outline",
+                    color: "red"
+                };
+            default:
+                return {
+                    icon: "ios-checkmark-circle-outline",
+                    color: "green"
+                };
+        }
     }
 
     itemTapped(event, item) {
