@@ -18,6 +18,7 @@ export class Park {
         ride.getRides(this.park, res => {
             console.log("Rides:", res);
             this.items = [];
+            res = this.sortRidesAlphabetically(res);
             res && res.forEach((ride) => {
                 let iconInfo = this.getIcon(ride.status);
                 this.items.push({
@@ -31,8 +32,12 @@ export class Park {
         })
     }
 
-    getWaitTimeString(waitTime) {
-
+    sortRidesAlphabetically(rides){
+        return rides.sort((a,b) => {
+            let aText = a.name.toUpperCase();
+            let bText = b.name.toUpperCase();
+            return (aText < bText) ? -1 : (aText > bText) ? 1 : 0;
+        })
     }
 
     getIcon(status) {
