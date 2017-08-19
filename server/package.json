@@ -1,0 +1,15 @@
+{
+  "name": "antiqueue-server",
+  "version": "1.0.0",
+  "description": "node server for antique api",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.15.4",
+    "themeparks": "^4.5.0"
+  }
+}
