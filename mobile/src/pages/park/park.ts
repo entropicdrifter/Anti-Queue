@@ -12,6 +12,7 @@ export class Park {
     icons: string[];
     title: string;
     items: Array<{ title: string, note: string, icon: string, color: string }>;
+    filteredRides: Array<{ title: string, note: string, icon: string, color: string }>;    
     loading: boolean;
 
     constructor(public navCtrl: NavController, public navParams: NavParams) {
@@ -43,6 +44,14 @@ export class Park {
             let bText = b.name.toUpperCase();
             return (aText < bText) ? -1 : (aText > bText) ? 1 : 0;
         })
+    }
+
+    onInput(e){  
+        let query = e.target.value.toUpperCase();
+        let filteredRides = this.items && this.items.filter(ride => {
+            return ride.title.toUpperCase().includes(query);
+        });
+        this.filteredRides = filteredRides;
     }
 
     getIcon(status) {
