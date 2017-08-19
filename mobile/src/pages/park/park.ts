@@ -12,12 +12,15 @@ export class Park {
     icons: string[];
     title: string;
     items: Array<{ title: string, note: string, icon: string, color: string }>;
+    loading: boolean;
 
     constructor(public navCtrl: NavController, public navParams: NavParams) {
         this.park = navParams.get('parkId');
         this.title = navParams.get('title');
         let ride = new Rides();
+        this.loading = true;
         ride.getRides(this.park, res => {
+            this.loading = false;
             console.log("Rides:", res);
             this.items = [];
             res = this.sortRidesAlphabetically(res);
