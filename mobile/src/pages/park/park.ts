@@ -6,6 +6,7 @@ import { Rides } from '../../service/Rides';
     selector: 'park',
     templateUrl: 'park.html'
 })
+
 export class Park {
     park: string;
     icons: string[];
@@ -13,17 +14,13 @@ export class Park {
     items: Array<{ title: string, note: string, icon: string, color: string }>;
 
     constructor(public navCtrl: NavController, public navParams: NavParams) {
-        // Let's populate this page with some filler content for funzies
-        this.icons = ['flask', 'wifi', 'beer', 'football', 'basketball', 'paper-plane',
-            'american-football', 'boat', 'bluetooth', 'build'];
-        // If we navigated to this page, we will have an item available as a nav param
         this.park = navParams.get('parkId');
         this.title = navParams.get('title');
-        // this.park = "KingsIsland";
         let ride = new Rides();
         ride.getRides(this.park, res => {
             console.log("Rides:", res);
             this.items = [];
+            res = this.sortRidesAlphabetically(res);
             res && res.forEach((ride) => {
                 let iconInfo = this.getIcon(ride.status);
                 this.items.push({
@@ -37,15 +34,19 @@ export class Park {
         })
     }
 
-    getWaitTimeString(waitTime) {
-        return
+    sortRidesAlphabetically(rides){
+        return rides.sort((a,b) => {
+            let aText = a.name.toUpperCase();
+            let bText = b.name.toUpperCase();
+            return (aText < bText) ? -1 : (aText > bText) ? 1 : 0;
+        })
     }
 
     getIcon(status) {
         switch (status) {
             case "Refurbishment":
                 return {
-                    icon: "ios-construct",
+                    icon: "ios-construct-outline",
                     color: "red"
                 };
             case "Closed":
@@ -55,7 +56,7 @@ export class Park {
                 };
             case "Down":
                  return {
-                    icon: "ios-build",
+                    icon: "ios-build-outline",
                     color: "red"
                 };
             default:
